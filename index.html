@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LuV</title>
+<link rel="stylesheet" href="./styles/base.css">
+<link rel="stylesheet" href="./styles/layout.css">
+<link rel="stylesheet" href="./styles/print.css">
+</head>
+<body>
+<div class="container" id="app">
+  <section class="card header">
+    <div class="header-grid">
+      <div>
+        <p class="eyebrow">Leistungs- und Verhaltensbeurteilung</p>
+        <h1>LuV</h1>
+        <p class="muted">Die Bewertung, Textbildung, Formularansicht, Speicherung und Ausgabe laufen vollständig im Browser. Die fachlichen Daten liegen getrennt von Oberfläche und Logik.</p>
+      </div>
+      <div class="actions no-print" aria-label="LuV-Aktionen">
+        <button class="btn primary" type="button" data-action="randomize">Zufallswerte</button>
+        <button class="btn" type="button" data-action="clear-ratings">Alle leeren</button>
+        <button class="btn" type="button" data-action="reset">Zurücksetzen</button>
+        <button class="btn" type="button" data-action="save">Speichern</button>
+        <button class="btn" type="button" data-action="load">Laden</button>
+        <button class="btn" type="button" data-action="export-markdown">Markdown</button>
+        <button class="btn" type="button" data-action="export-json">JSON</button>
+        <button class="btn" type="button" data-action="print">Drucken</button>
+      </div>
+    </div>
+
+    <div class="fields no-print">
+      <label>Anrede
+        <select id="anrede" data-field="anrede">
+          <option>Hr.</option>
+          <option>Herr</option>
+          <option>Frau</option>
+        </select>
+      </label>
+      <label>Vorname/Kürzel
+        <input id="vorname" data-field="vorname" value="A.">
+      </label>
+      <label>Nachname
+        <input id="nachname" data-field="nachname">
+      </label>
+      <label>Datum
+        <input id="datum" data-field="datum" type="date">
+      </label>
+      <label>Formular
+        <select id="formType" data-field="formType">
+          <option>Start-LuV</option>
+          <option>Abschluss-LuV</option>
+          <option>Ergebnis</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="statName">-</b>Teilnehmer</div>
+      <div class="stat"><b id="statDone">0 von 103</b>Bewertungen gesetzt</div>
+      <div class="stat"><b>4 Bereiche · 18 Merkmale</b>Struktur übernommen</div>
+      <div class="stat"><b>2575</b>Textbausteine eingebettet</div>
+    </div>
+  </section>
+
+  <nav class="tabs no-print" id="tabs" aria-label="LuV-Bereiche">
+    <button class="tab active" type="button" data-tab="bewertung">Bewertung</button>
+    <button class="tab" type="button" data-tab="ergebnis">Erzeugtes Ergebnis</button>
+    <button class="tab" type="button" data-tab="bericht">Druckbericht</button>
+    <button class="tab" type="button" data-tab="startluv">Start-LuV</button>
+    <button class="tab" type="button" data-tab="abschlussluv">Abschluss-LuV</button>
+    <button class="tab" type="button" data-tab="ergebnisformular">Ergebnisformular</button>
+    <button class="tab" type="button" data-tab="fachlich">Fachliche Angaben</button>
+    <button class="tab" type="button" data-tab="daten">Datenübersicht</button>
+  </nav>
+
+  <main id="bewertung" class="tabcontent"></main>
+  <main id="bericht" class="tabcontent hidden"></main>
+  <main id="ergebnis" class="tabcontent hidden"></main>
+  <main id="startluv" class="tabcontent hidden"></main>
+  <main id="abschlussluv" class="tabcontent hidden"></main>
+  <main id="ergebnisformular" class="tabcontent hidden"></main>
+  <main id="fachlich" class="tabcontent hidden"></main>
+  <main id="daten" class="tabcontent hidden"></main>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
