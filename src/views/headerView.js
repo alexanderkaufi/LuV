@@ -10,6 +10,14 @@ export function syncFieldControls(appState, root = document) {
 }
 
 export function updateStats(data, appState, root = document) {
-  root.getElementById("statName").textContent = fullName(appState.fields) || "-";
-  root.getElementById("statDone").textContent = `${appState.doneCount} von ${data.meta.indikatoren}`;
+  const statName = root.getElementById("statName");
+  const statDone = root.getElementById("statDone");
+
+  if (statName) {
+    statName.textContent = fullName(appState.fields) || "-";
+  }
+
+  if (statDone) {
+    statDone.textContent = `${appState.doneCount} von ${data.meta.indikatoren}`;
+  }
 }
