@@ -68,7 +68,23 @@ textarea {
 
 input,
 select {
-  min-height:43px;
+  height:44px;
+  line-height:20px;
+}
+
+select {
+  -webkit-appearance:none;
+  appearance:none;
+  padding-right:36px;
+  background-color:white;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 12px) 50%;
+  background-size:6px 6px, 6px 6px;
+  background-repeat:no-repeat;
 }
 
 textarea {
