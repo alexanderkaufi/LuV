@@ -1,5 +1,9 @@
 import { variants } from "../model/rating.js";
 
+function randomVariant() {
+  return variants[Math.floor(Math.random() * variants.length)];
+}
+
 export class AppState {
   constructor(data) {
     this.data = data;
@@ -37,7 +41,7 @@ export class AppState {
         competency.indicators.forEach((indicator) => {
           this.ratings[indicator.id] = {
             rating: indicator.defaultRating || "",
-            variant: indicator.defaultVariant || "a"
+            variant: randomVariant()
           };
         });
       });
@@ -48,7 +52,7 @@ export class AppState {
     this.data.sections.forEach((section) => {
       section.competencies.forEach((competency) => {
         competency.indicators.forEach((indicator) => {
-          this.ratings[indicator.id] = { rating: "", variant: "a" };
+          this.ratings[indicator.id] = { rating: "", variant: randomVariant() };
         });
       });
     });
@@ -60,7 +64,7 @@ export class AppState {
         competency.indicators.forEach((indicator) => {
           this.ratings[indicator.id] = {
             rating: String(1 + Math.floor(Math.random() * 5)),
-            variant: variants[Math.floor(Math.random() * variants.length)]
+            variant: randomVariant()
           };
         });
       });
@@ -69,7 +73,7 @@ export class AppState {
 
   setRating(indicatorId, property, value) {
     this.ratings[indicatorId] = {
-      ...(this.ratings[indicatorId] || { rating: "", variant: "a" }),
+      ...(this.ratings[indicatorId] || { rating: "", variant: randomVariant() }),
       [property]: value
     };
   }
@@ -81,7 +85,7 @@ export class AppState {
         if (currentIndex === compIndex) {
           competency.indicators.forEach((indicator) => {
             this.ratings[indicator.id] = {
-              ...(this.ratings[indicator.id] || { variant: "a" }),
+              ...(this.ratings[indicator.id] || { variant: randomVariant() }),
               rating: String(rating)
             };
           });
