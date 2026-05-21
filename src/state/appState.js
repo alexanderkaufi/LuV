@@ -4,7 +4,7 @@ export class AppState {
   constructor(data) {
     this.data = data;
     this.fields = {
-      anrede: "Hr.",
+      anrede: "Herr",
       vorname: "A.",
       nachname: "",
       datum: new Date().toISOString().slice(0, 10),
@@ -18,7 +18,7 @@ export class AppState {
 
   resetAll() {
     this.fields = {
-      anrede: "Hr.",
+      anrede: "Herr",
       vorname: "A.",
       nachname: "",
       datum: new Date().toISOString().slice(0, 10),
@@ -125,5 +125,8 @@ export class AppState {
       ...this.fields,
       ...(payload.fields || {})
     };
+    if (this.fields.anrede === "Hr." || this.fields.anrede === "Hr") {
+      this.fields.anrede = "Herr";
+    }
   }
 }
