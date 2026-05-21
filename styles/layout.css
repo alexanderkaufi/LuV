@@ -69,13 +69,6 @@
   margin-top:22px;
 }
 
-.stats {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:18px;
-}
-
 .stat {
   background:var(--soft);
   border-radius:18px;
@@ -245,10 +238,6 @@ td.preview {
 
   .fields {
     grid-template-columns:1fr;
-  }
-
-  .stats {
-    grid-template-columns:1fr 1fr;
   }
 
   .sidebar {

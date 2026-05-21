@@ -2,7 +2,7 @@ import { exportJson, exportMarkdown } from "../services/exportService.js";
 import { loadLocal, saveLocal } from "../services/storageService.js";
 import { buildResults, phraseById } from "../services/textBuilder.js";
 import { formNameByTab, formTabByName, renderFreeTexts, renderSpecificForm } from "./formView.js";
-import { syncFieldControls, updateStats } from "./headerView.js";
+import { syncFieldControls } from "./headerView.js";
 import { renderDataOverview } from "./dataOverviewView.js";
 import { renderRatings } from "./ratingView.js";
 import { renderReport, renderResults } from "./resultView.js";
@@ -139,7 +139,6 @@ export class AppView {
   }
 
   renderAll() {
-    updateStats(this.data, this.appState);
     renderRatings(document.getElementById("bewertung"), this.data, this.appState);
     this.renderCurrentTab();
   }
