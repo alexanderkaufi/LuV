@@ -64,7 +64,7 @@
 
 .fields {
   display:grid;
-  grid-template-columns:repeat(5, minmax(0, 1fr));
+  grid-template-columns:130px 1fr 1fr 180px 220px;
   gap:14px;
   margin-top:22px;
 }
