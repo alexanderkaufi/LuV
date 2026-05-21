@@ -1,5 +1,5 @@
 import { ratings, ratingLabels, variants } from "../model/rating.js";
-import { phraseForIndicator } from "../services/textBuilder.js";
+import { phraseForIndicator, phraseIndexByIndicator } from "../services/textBuilder.js";
 import { esc, slug } from "../utils/html.js";
 
 function sidebar(data) {
@@ -16,6 +16,7 @@ function sidebar(data) {
 
 export function renderRatings(container, data, appState) {
   let compCounter = 0;
+  const phraseIndexes = phraseIndexByIndicator(data, appState);
   let html = `<div class="layout">${sidebar(data)}<div>`;
   html += '<div class="toolbar no-print"><button class="btn small" type="button" data-action="open-all">Alle öffnen</button><button class="btn small" type="button" data-action="close-all">Alle schließen</button><button class="btn small" type="button" data-action="clear-ratings">Alle Bewertungen löschen</button></div>';
 
@@ -32,7 +33,7 @@ export function renderRatings(container, data, appState) {
 
         competency.indicators.forEach((indicator) => {
           const entry = appState.ratings[indicator.id] || { rating: "", variant: "a" };
-          const phrase = phraseForIndicator(indicator, appState);
+          const phrase = phraseForIndicator(indicator, appState, phraseIndexes.get(indicator.id) ?? 0);
           html += `<tr><td>${esc(indicator.row)}</td><td class="indicator">${esc(indicator.text)}</td><td><select data-action="set-rating" data-indicator-id="${esc(indicator.id)}" data-property="rating">${ratings.map((rating) => `<option value="${rating}" ${entry.rating === rating ? "selected" : ""}>${ratingLabels[rating]}</option>`).join("")}</select></td><td><select data-action="set-rating" data-indicator-id="${esc(indicator.id)}" data-property="variant">${variants.map((variant) => `<option value="${variant}" ${entry.variant === variant ? "selected" : ""}>${variant}</option>`).join("")}</select></td><td class="preview">${phrase ? esc(phrase) : '<span class="muted">Keine Bewertung ausgewählt.</span>'}</td><td><button class="btn small" type="button" data-action="copy-phrase" data-indicator-id="${esc(indicator.id)}">Kopieren</button></td></tr>`;
         });
 

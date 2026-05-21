@@ -17,6 +17,11 @@ export function fullName(fields) {
   return [anrede, fields.vorname, fields.nachname].filter(Boolean).join(" ").trim();
 }
 
+function subjectFor(fields, subjectIndex) {
+  const name = fullName(fields);
+  return subjectIndex % 2 === 0 && name ? name : pronounFor(fields);
+}
+
 function phraseForAnrede(phrase, fields) {
   if (anredeKind(fields) === "herr") return phrase;
 
@@ -40,19 +45,44 @@ function phraseForAnrede(phrase, fields) {
   });
 }
 
-export function phraseForIndicator(indicator, appState) {
+function phraseBodyForIndicator(indicator, appState) {
   const entry = appState.ratings[indicator.id] || { rating: "", variant: "a" };
   const key = entry.rating ? entry.rating + (entry.variant || "a") : "";
   const phrase = indicator.options[key] || "";
-  return phrase ? `${pronounFor(appState.fields)} ${phraseForAnrede(phrase, appState.fields)}` : "";
+  return phrase ? phraseForAnrede(phrase, appState.fields) : "";
+}
+
+export function phraseIndexByIndicator(data, appState) {
+  const indexes = new Map();
+  let subjectIndex = 0;
+
+  data.sections.forEach((section) => {
+    section.competencies.forEach((competency) => {
+      competency.indicators.forEach((indicator) => {
+        if (phraseBodyForIndicator(indicator, appState)) {
+          indexes.set(indicator.id, subjectIndex);
+          subjectIndex += 1;
+        }
+      });
+    });
+  });
+
+  return indexes;
+}
+
+export function phraseForIndicator(indicator, appState, subjectIndex = 0) {
+  const phrase = phraseBodyForIndicator(indicator, appState);
+  return phrase ? `${subjectFor(appState.fields, subjectIndex)} ${phrase}` : "";
 }
 
 export function phraseById(data, appState, indicatorId) {
+  const phraseIndexes = phraseIndexByIndicator(data, appState);
+
   for (const section of data.sections) {
     for (const competency of section.competencies) {
       for (const indicator of competency.indicators) {
         if (indicator.id === indicatorId) {
-          return phraseForIndicator(indicator, appState);
+          return phraseForIndicator(indicator, appState, phraseIndexes.get(indicator.id) ?? 0);
         }
       }
     }
@@ -61,11 +91,16 @@ export function phraseById(data, appState, indicatorId) {
 }
 
 export function buildResults(data, appState) {
+  const phraseIndexes = phraseIndexByIndicator(data, appState);
+
   return data.sections.map((section) => ({
     title: section.title,
     competencies: section.competencies.map((competency) => ({
       title: competency.title,
-      text: competency.indicators.map((indicator) => phraseForIndicator(indicator, appState)).filter(Boolean).join(" ")
+      text: competency.indicators
+        .map((indicator) => phraseForIndicator(indicator, appState, phraseIndexes.get(indicator.id) ?? 0))
+        .filter(Boolean)
+        .join(" ")
     }))
   }));
 }
