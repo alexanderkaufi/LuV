@@ -1,4 +1,3 @@
-import { exportJson, exportMarkdown } from "../services/exportService.js";
 import { loadLocal, saveLocal } from "../services/storageService.js";
 import { buildResults, phraseById } from "../services/textBuilder.js";
 import { formNameByTab, formTabByName, renderFreeTexts, renderSpecificForm } from "./formView.js";
@@ -24,6 +23,7 @@ export class AppView {
     document.addEventListener("click", (event) => this.handleClick(event));
     document.addEventListener("change", (event) => this.handleChange(event));
     document.addEventListener("input", (event) => this.handleInput(event));
+    window.addEventListener("beforeprint", () => this.renderPrintReport());
   }
 
   handleClick(event) {
@@ -57,16 +57,9 @@ export class AppView {
       this.appState.restore(payload);
       syncFieldControls(this.appState);
     }
-    if (action === "export-markdown") {
-      exportMarkdown(this.data, this.appState);
-      return;
-    }
-    if (action === "export-json") {
-      exportJson(this.appState);
-      return;
-    }
     if (action === "print") {
-      window.print();
+      this.showTab("bericht");
+      requestAnimationFrame(() => window.print());
       return;
     }
     if (action === "open-all") this.appState.setAllSections(true);
@@ -159,6 +152,10 @@ export class AppView {
     if (this.currentTab === "daten") {
       renderDataOverview(document.getElementById("daten"), this.data);
     }
+  }
+
+  renderPrintReport() {
+    renderReport(document.getElementById("bericht"), this.data, this.appState);
   }
 
   async copyText(text) {
